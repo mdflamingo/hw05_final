@@ -32,16 +32,7 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     page_obj = paginating(request, author.posts.all())
     following = request.user.is_authenticated and Follow.objects.filter(
-    user=request.user, author=author
-).exists()
-    #request.user.is_authenticated and author.following.exists()
-    # following = (
-    #     request.user.is_authenticated
-    #     and Follow.objects.filter(
-    #         user=request.user,
-    #         author=author,
-    #     ).exists()
-    # )
+        user=request.user, author=author).exists()
     context = {
         'author': author,
         'page_obj': page_obj,
