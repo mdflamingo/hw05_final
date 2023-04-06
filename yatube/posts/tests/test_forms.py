@@ -75,7 +75,7 @@ class PostCreateFormTests(TestCase):
             Post.objects.filter(
                 text=form_data['text'],
                 group=PostCreateFormTests.group.id,
-                image='posts/small.gif',
+                image=f'posts/{uploaded.name}',
             ).exists()
         )
 

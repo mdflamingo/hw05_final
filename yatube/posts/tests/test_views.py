@@ -194,23 +194,25 @@ class ViewsURLTests(TestCase):
     def test_authorized_author_profile_follow(self):
         """Авторизованный пользователь может подписываться
         на других пользователей."""
+        follower_count = Follow.objects.count()
         response = self.authorized_client_follower.get(
             reverse('posts:profile_follow', kwargs={'username': self.author}))
         self.assertRedirects(response, reverse(
             'posts:profile', kwargs={'username': self.author}))
-        self.assertEqual(Follow.objects.count(), 1)
+        self.assertEqual(Follow.objects.count(), follower_count + 1)
         self.assertEqual(Follow.objects.first().user, self.follower)
         self.assertEqual(Follow.objects.first().author, self.author)
 
     def test_authorized_author_profile_unfollow(self):
-        """Авторизованный пользователь может и удалять
+        """Авторизованный пользователь может удалять
         пользователей из подписок."""
+        follower_count = Follow.objects.count()
         response = self.authorized_client_follower.get(
             reverse('posts:profile_unfollow',
                     kwargs={'username': self.author}))
         self.assertRedirects(response, reverse(
             'posts:profile', kwargs={'username': self.author}))
-        self.assertEqual(Follow.objects.count(), 0)
+        self.assertEqual(Follow.objects.count(), follower_count)
 
     def test_follower_author(self):
         """Появление новых постов у подписанных пользователей."""
